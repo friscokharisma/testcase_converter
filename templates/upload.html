@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+    <style>
+        .upload-btn {
+            border: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Upload Files</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="files" id="files" multiple>
+        <input type="submit" value="Upload" class="upload-btn">
+    </form>
+
+    {% if files_content %}
+        <h3>Uploaded Files Content:</h3>
+        <ul>
+            {% for filename, content in files_content %}
+                <li>
+                    <strong>{{ filename }}</strong>
+                    <pre>{{ content }}</pre>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
