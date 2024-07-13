@@ -15,6 +15,37 @@ body, html {height: 100%}
   background-position: center;
   background-size: cover;
 }
+
+/* ----- testing ----- */
+#file {
+    display: none;
+}
+
+/* Style the custom button */
+.custom-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-button {
+    background-color: #28a745;
+}
+
+/* Style the file list */
+#fileList ul {
+    list-style-type: none;
+    padding: 0;
+}
+#fileList li {
+    margin: 5px 0;
+}
+/* ----- testing ----- */
+
 </style>
 </head>
 <body>
@@ -23,15 +54,75 @@ body, html {height: 100%}
   <div class="w3-display-topleft w3-padding-large w3-xlarge">
     EFKA
   </div>
-  <div class="w3-display-middle">
-    <h1 class="w3-jumbo w3-animate-top">COMING SOON</h1>
+  <div class="w3-display-middle" style="text-align: center">
+    <!-- ----- testing ----- -->
+    <h1 class="w3-margin w3-jumbo">TEST CASE CONVERTER</h1>
+    <p class="w3-xlarge">Start with drop your file here</p>
+  
+    <!-- Hidden file input -->
+    <input type="file" id="file" multiple onchange="updateList()">
+      
+    <!-- Custom button -->
+    <button class="custom-button" onclick="document.getElementById('file').click();">Choose Files</button>
+    <button class="custom-button upload-button" onclick="uploadFiles()">Upload</button>
+    
+    <!-- File list -->
+    <div id="fileList"></div>
+
+    <h3 style="margin-top: 100px">How to use</h3>
+    <p class="w3-text">Change header of your file with this format<br>
+    | NO | FEATURE | TEST OBJECTIVE | PRECONDITION | TEST DATA | EXPECTED RESULT | TYPE | TEST RESULT |<br>
+    *note : must be exact value (case sensitive)</p>
+    <p class="w3-text">Upload your file and go!</p>
+    <!-- ----- testing ----- -->
+
+    <!-- <h1 class="w3-jumbo w3-animate-top">COMING SOON</h1>
     <hr class="w3-border-grey" style="margin:auto;width:40%">
-    <p class="w3-large w3-center">35 days left</p>
+    <p class="w3-large w3-center">35 days left</p> -->
   </div>
   <div class="w3-display-bottomleft w3-padding-large">
     Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
   </div>
 </div>
+
+<script>
+    function myFunction() {
+  var x = document.getElementById("navDemo");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+
+function updateList() {
+    var input = document.getElementById('file');
+    var output = document.getElementById('fileList');
+    var fileNames = [];
+
+    for (var i = 0; i < input.files.length; ++i) {
+        fileNames.push('<li>' + input.files.item(i).name + '</li>');
+    }
+
+    output.innerHTML = '<ul>' + fileNames.join('') + '</ul>';
+}
+
+function uploadFiles() {
+    var input = document.getElementById('file');
+    if (input.files.length === 0) {
+        alert("No files selected to upload.");
+        return;
+    }
+    
+    // This is a placeholder for actual file upload logic
+    // In a real scenario, you would send the files to a server using AJAX or a form submission
+    alert("Files uploaded successfully!");
+    
+    // Clear the file input and list after upload
+    input.value = '';
+    document.getElementById('fileList').innerHTML = '';
+}
+</script>
 
 </body>
 </html>
