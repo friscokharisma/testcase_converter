@@ -44,7 +44,8 @@ def read_file_content(file_path):
 
 def home() : 
     # return "test home page"
-    return render_template('home.html')
+    # return render_template('home.html')
+    return render_template('test_template.html')
 
 if __name__ == "__main__":
     app.run(debug=True, port=os.getenv("PORT", default=5000))
