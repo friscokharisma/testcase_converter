@@ -60,16 +60,19 @@ body, html {height: 100%}
     <p class="w3-xlarge">Start with drop your file here</p>
   
     <!-- Hidden file input -->
-    <input type="file" id="file" multiple onchange="updateList()">
+    <input type="file" id="file" accept=".xlsx" multiple onchange="updateList()">
       
     <!-- Custom button -->
-    <button class="custom-button" onclick="document.getElementById('file').click();">Choose Files</button>
-    <button class="custom-button upload-button" onclick="uploadFiles()">Upload</button>
+    <button class="custom-button" onclick="document.getElementById('file').click();">Upload Files</button>
+    <button class="custom-button upload-button" onclick="uploadFiles()">Go!</button>
+    <!-- <button class="custom-button" id="deleteAllButton" style="display: none;" onclick="deleteAllFiles()">Clear All</button> -->
     
     <!-- File list -->
     <div id="fileList"></div>
-
-    <h3 style="margin-top: 100px">How to use</h3>
+    
+    <button class="custom-button" id="deleteAllButton" style="display: none; margin: 0 auto; margin-top: 10px; background-color: #FF0000;" onclick="deleteAllFiles()">Clear All</button>
+    
+    <h3 style="margin-top: 50px">How to use</h3>
     <p class="w3-text">Change header of your file with this format<br>
     | NO | FEATURE | TEST OBJECTIVE | PRECONDITION | TEST DATA | EXPECTED RESULT | TYPE | TEST RESULT |<br>
     *note : must be exact value (case sensitive)</p>
@@ -86,41 +89,62 @@ body, html {height: 100%}
 </div>
 
 <script>
-    function myFunction() {
-  var x = document.getElementById("navDemo");
-  if (x.className.indexOf("w3-show") == -1) {
-    x.className += " w3-show";
-  } else { 
-    x.className = x.className.replace(" w3-show", "");
+// function myFunction() {
+//   var x = document.getElementById("navDemo");
+//   if (x.className.indexOf("w3-show") == -1) {
+//     x.className += " w3-show";
+//   } else { 
+//     x.className = x.className.replace(" w3-show", "");
+//   }
+// }
+
+function updateList() {
+  var input = document.getElementById('file');
+  var output = document.getElementById('fileList');
+  var fileNames = [];
+
+  for (var i = 0; i < input.files.length; ++i) {
+      fileNames.push('<li>' + input.files.item(i).name + '</li>');
+  }
+
+  output.innerHTML = '<ul>' + fileNames.join('') + '</ul>';
+
+  // Show the "Clear All" button if files are uploaded
+  if (input.files.length > 0) {
+    document.getElementById('deleteAllButton').style.display = 'block';
+  } else {
+    document.getElementById('deleteAllButton').style.display = 'none';
   }
 }
 
-function updateList() {
-    var input = document.getElementById('file');
-    var output = document.getElementById('fileList');
-    var fileNames = [];
+function uploadFiles() {
+  var input = document.getElementById('file');
+  if (input.files.length === 0) {
+      alert("No files selected to upload.");
+      return;
+  }
 
-    for (var i = 0; i < input.files.length; ++i) {
-        fileNames.push('<li>' + input.files.item(i).name + '</li>');
-    }
-
-    output.innerHTML = '<ul>' + fileNames.join('') + '</ul>';
+  // validation for upload .xslx only
+  for (var i = 0; i < input.files.length; ++i) {
+      if (!input.files[i].name.endsWith('.xlsx')) {
+          alert("Only .xlsx files are allowed.");
+          return;
+      }
+  }
+  
+  // This is a placeholder for actual file upload logic
+  // In a real scenario, you would send the files to a server using AJAX or a form submission
+  alert("Files uploaded successfully!");
+  
+  // Clear the file input and list after upload
+  input.value = '';
+  document.getElementById('fileList').innerHTML = '';
 }
 
-function uploadFiles() {
-    var input = document.getElementById('file');
-    if (input.files.length === 0) {
-        alert("No files selected to upload.");
-        return;
-    }
-    
-    // This is a placeholder for actual file upload logic
-    // In a real scenario, you would send the files to a server using AJAX or a form submission
-    alert("Files uploaded successfully!");
-    
-    // Clear the file input and list after upload
-    input.value = '';
-    document.getElementById('fileList').innerHTML = '';
+function deleteAllFiles() {
+  document.getElementById('fileList').innerHTML = '';
+  document.getElementById('file').value = '';
+  document.getElementById('deleteAllButton').style.display = 'none';
 }
 </script>
 
