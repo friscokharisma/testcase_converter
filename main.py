@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for 
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory 
 import os
 import pandas as pd
 
@@ -19,39 +19,23 @@ if not os.path.exists(PROCESSED_FOLDER):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# def read_file_content(file_path):
-#     try:
-#         with open(file_path, 'r', encoding='utf-8') as f:
-#             return f.read()
-#     except UnicodeDecodeError:
-#         try:
-#             with open(file_path, 'r', encoding='latin1') as f:
-#                 return f.read()
-#         except UnicodeDecodeError:
-#             return "Could not decode file content"
-
 @app.route("/", methods=['GET', 'POST'])
 def upload_files():
     if request.method =='POST':
-        files = request.files.getlist('files')
-        uploaded_files_content = []
+        if 'file[]' not in request.files:
+            return redirect(request.url)
+        
+        files = request.files.getlist('file[]')
 
         for file in files:
+            if file.filename == '':
+                continue
             if file and allowed_file(file.filename):
                 filename = file.filename
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-                file.save(file_path)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                uploaded_files_content.append(filename)
-
-                # content = read_file_content(file_path)
-                # uploaded_files_content.append((file.filename, content))
-
-                # with open(file_path, 'r') as f:
-                #     content = f.read()
-                #     uploaded_files_content.append((file.filename, content))
-        
-        return render_template('test_template.html', files_content=uploaded_files_content)
+        return redirect(url_for('upload_files'))
+        # return render_template('test_template.html', files_content=uploaded_files_content)
     # upload.html
     return render_template('test_template.html')
 
@@ -59,15 +43,6 @@ def upload_files():
     # return "test home page"
     # return render_template('home.html')
     # return render_template('test_template.html')
-
-# test for display content using pandas
-# @app.route('/uploads/<filename>')
-# def uploaded_file(filename):
-#     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-#     # Read the Excel file using pandas
-#     df = pd.read_excel(filepath)
-#     # Display the content of the Excel file (for demonstration)
-#     return df.to_html()
 
 @app.route('/list_files')
 def list_files():

@@ -58,30 +58,27 @@ body, html {height: 100%}
     <!-- ----- testing ----- -->
     <h1 class="w3-margin w3-jumbo">TEST CASE CONVERTER</h1>
     <p class="w3-xlarge">Start with drop your file here</p>
-  
-    <!-- Hidden file input -->
-    <input type="file" id="file" accept=".xlsx" multiple onchange="updateList()">
-      
-    <!-- Custom button -->
-    <button class="custom-button" onclick="document.getElementById('file').click();">Upload Files</button>
-    <button class="custom-button upload-button" onclick="uploadFiles()">Go!</button>
-    <!-- <button class="custom-button" id="deleteAllButton" style="display: none;" onclick="deleteAllFiles()">Clear All</button> -->
     
-    <!-- File list -->
-    <div id="fileList"></div>
-    
-    <button class="custom-button" id="deleteAllButton" style="display: none; margin: 0 auto; margin-top: 10px; background-color: #FF0000;" onclick="deleteAllFiles()">Clear All</button>
-    
+    <!-- working -->
+    <form method="post" enctype="multipart/form-data">
+      <input id="file-input" type="file" accept=".xlsx" name="file[]" multiple style="display: none;">
+      <label for="file-input" class="custom-button">Select files</label>
+      <input class="custom-button upload-button" type="submit" value="Upload">
+    </form>
+    <!-- working -->
+
+    <ul id="file-list">
+        <!-- Selected files will be shown here -->
+    </ul>
+    <button id="clear-button" class="clear-button" style="display: none;">Clear</button>
+
     <h3 style="margin-top: 50px">How to use</h3>
     <p class="w3-text">Change header of your file with this format<br>
     | NO | FEATURE | TEST OBJECTIVE | PRECONDITION | TEST DATA | EXPECTED RESULT | TYPE | TEST RESULT |<br>
     *note : must be exact value (case sensitive)</p>
     <p class="w3-text">Upload your file and go!</p>
     <!-- ----- testing ----- -->
-
-    <!-- <h1 class="w3-jumbo w3-animate-top">COMING SOON</h1>
-    <hr class="w3-border-grey" style="margin:auto;width:40%">
-    <p class="w3-large w3-center">35 days left</p> -->
+     
   </div>
   <div class="w3-display-bottomleft w3-padding-large">
     Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
@@ -89,14 +86,32 @@ body, html {height: 100%}
 </div>
 
 <script>
-// function myFunction() {
-//   var x = document.getElementById("navDemo");
-//   if (x.className.indexOf("w3-show") == -1) {
-//     x.className += " w3-show";
-//   } else { 
-//     x.className = x.className.replace(" w3-show", "");
-//   }
-// }
+// for show list of files 
+document.getElementById('file-input').addEventListener('change', function() {
+    var fileList = document.getElementById('file-list');
+    var clearButton = document.getElementById('clear-button');
+    fileList.innerHTML = ''; // Clear the list
+    
+    for (var i = 0; i < this.files.length; i++) {
+        var listItem = document.createElement('li');
+        listItem.textContent = this.files[i].name;
+        fileList.appendChild(listItem);
+    }
+
+    if (this.files.length > 0) {
+        clearButton.style.display = 'inline-block';
+    } else {
+        clearButton.style.display = 'none';
+    }
+});
+
+document.getElementById('clear-button').addEventListener('click', function() {
+    var fileInput = document.getElementById('file-input');
+    var fileList = document.getElementById('file-list');
+    fileInput.value = ''; // Clear the input
+    fileList.innerHTML = ''; // Clear the file list
+    this.style.display = 'none'; // Hide the clear button
+});
 
 function updateList() {
   var input = document.getElementById('file');
@@ -147,6 +162,7 @@ function deleteAllFiles() {
   document.getElementById('file').value = '';
   document.getElementById('deleteAllButton').style.display = 'none';
 }
+
 </script>
 
 </body>
