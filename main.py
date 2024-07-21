@@ -69,6 +69,11 @@ def uploaded_file(filename):
     # Display the content of the Excel file (for demonstration)
     return df.to_html()
 
+@app.route('/list_files')
+def list_files():
+    files = os.listdir(app.config['UPLOAD_FOLDER'])
+    return render_template('list_files.html', files=files)
+
 if __name__ == "__main__":
     app.run(debug=True, port=os.getenv("PORT", default=5000))
     # app.run(debug=True)
