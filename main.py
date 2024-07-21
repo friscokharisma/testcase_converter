@@ -60,14 +60,14 @@ def upload_files():
     # return render_template('home.html')
     # return render_template('test_template.html')
 
-# test
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    # Read the Excel file using pandas
-    df = pd.read_excel(filepath)
-    # Display the content of the Excel file (for demonstration)
-    return df.to_html()
+# test for display content using pandas
+# @app.route('/uploads/<filename>')
+# def uploaded_file(filename):
+#     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#     # Read the Excel file using pandas
+#     df = pd.read_excel(filepath)
+#     # Display the content of the Excel file (for demonstration)
+#     return df.to_html()
 
 @app.route('/list_files')
 def list_files():
