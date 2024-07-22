@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Upload Multiple Files</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="files[]" id="file-input" multiple>
+        <div id="file-list"></div>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="response"></div>
+    
+    <h2>Server Files</h2>
+    <div id="server-files"></div>
+
+    <script>
+        document.getElementById('file-input').addEventListener('change', function() {
+            var fileList = document.getElementById('file-list');
+            fileList.innerHTML = '';
+
+            var files = this.files;
+            if (files.length > 0) {
+                var ul = document.createElement('ul');
+                for (var i = 0; i < files.length; i++) {
+                    var li = document.createElement('li');
+                    li.textContent = files[i].name;
+                    ul.appendChild(li);
+                }
+                fileList.appendChild(ul);
+            }
+        });
+
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            var files = document.querySelector('input[type="file"]').files;
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i]);
+            }
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('response').innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    document.getElementById('response').innerHTML = `<p>${data.message}</p><a href="/download/${data.folder}">Download Folder</a>`;
+                }
+                fetchFolder();  // Refresh the folder list
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        function fetchFolder(path = '') {
+            fetch(`/list_folder/${path}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('server-files').innerHTML = `<p>${data.error}</p>`;
+                    } else {
+                        var fileList = data.files;
+                        var serverFiles = document.getElementById('server-files');
+                        serverFiles.innerHTML = '';
+
+                        var ul = document.createElement('ul');
+                        fileList.forEach(file => {
+                            var li = document.createElement('li');
+                            if (file.type === 'folder') {
+                                li.innerHTML = `<a href="/view_folder/${file.path}">${file.name}</a>`;
+                            } else {
+                                li.innerHTML = `<a href="/list_folder/${file.path}" target="_blank">${file.name}</a>`;
+                            }
+                            ul.appendChild(li);
+                        });
+                        serverFiles.appendChild(ul);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchFolder();  // Fetch the initial folder list
+        });
+    </script>
+</body>
+</html>

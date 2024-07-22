@@ -1,0 +1,12 @@
+{% macro render_structure(structure) %}
+<ul>
+    {% for key, value in structure.items() %}
+        <li>
+            {{ key }}
+            {% if value %}
+                {{ render_structure(value) }}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% endmacro %}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Browser</title>
+    <style>
+        ul { list-style-type: none; }
+    </style>
+</head>
+<body>
+    <h1>Uploads Folder Structure</h1>
+    <div id="file-structure">
+        {% from "macros.html" import render_structure %}
+        {{ render_structure(structure) }}
+    </div>
+</body>
+</html>

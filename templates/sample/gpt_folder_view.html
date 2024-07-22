@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder View</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Contents of {{ folder_path }}</h1>
+    <div>
+        <ul>
+            {% for file in files %}
+                <li>
+                    {% if file.type == 'folder' %}
+                        <a href="/view_folder/{{ file.path }}">{{ file.name }}</a>
+                    {% else %}
+                        <a href="/list_folder/{{ file.path }}" target="_blank">{{ file.name }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="/">Back to Home</a>
+</body>
+</html>
