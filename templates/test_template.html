@@ -36,6 +36,14 @@ body, html {height: 100%}
     background-color: #28a745;
 }
 
+.clear-button {
+    background-color: #a72828;
+}
+
+.download-button {
+    background-color: #a7a128;
+}
+
 /* Style the file list */
 #fileList ul {
     list-style-type: none;
@@ -66,11 +74,12 @@ body, html {height: 100%}
       <input class="custom-button upload-button" type="submit" value="Upload">
     </form>
     <!-- working -->
+    <!-- <button id="download-button" class="custom-button download-button" style="display: none;">Download All</button> -->
 
     <ul id="file-list">
         <!-- Selected files will be shown here -->
     </ul>
-    <button id="clear-button" class="clear-button" style="display: none;">Clear</button>
+    <button id="clear-button" class="custom-button clear-button" style="display: none;">Clear</button>
 
     <h3 style="margin-top: 50px">How to use</h3>
     <p class="w3-text">Change header of your file with this format<br>
@@ -78,7 +87,9 @@ body, html {height: 100%}
     *note : must be exact value (case sensitive)</p>
     <p class="w3-text">Upload your file and go!</p>
     <!-- ----- testing ----- -->
-     
+
+    <a href="/list_files" class="custom-button" style="text-decoration: none;">Open List File</a>
+
   </div>
   <div class="w3-display-bottomleft w3-padding-large">
     Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
@@ -112,6 +123,32 @@ document.getElementById('clear-button').addEventListener('click', function() {
     fileList.innerHTML = ''; // Clear the file list
     this.style.display = 'none'; // Hide the clear button
 });
+
+// test download button
+$(document).ready(function() {
+    $('#upload-form').on('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $('#upload-status').text('Uploading and renaming files...');
+        $.ajax({
+            url: '/',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                $('#upload-status').html('Files uploaded and renamed: <br>' + response.uploaded_files.join('<br>'));
+                window.location.href = '/download_all';
+            },
+            error: function() {
+                $('#upload-status').text('Failed to upload files.');
+            }
+        });
+    });
+});
+// });
+
+// test download button
 
 function updateList() {
   var input = document.getElementById('file');
