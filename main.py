@@ -3,6 +3,8 @@ import os
 import zipfile
 from datetime import datetime
 
+import openpyxl
+
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -25,10 +27,23 @@ def upload_files():
     folder_path = os.path.join(app.config['UPLOAD_FOLDER'], timestamp)
     os.makedirs(folder_path)
 
+    # process_folder_path = os.path.join(app.config['PROCESSED_FOLDER'], timestamp)
+    # os.makedirs(process_folder_path)
+
     for file in files:
         filename = file.filename
-        new_filename = f"testing_{filename}" #process file is here <-----
-        file.save(os.path.join(folder_path, new_filename))
+        file.save(os.path.join(folder_path, filename))
+
+        # <----- processing file stage is here ----->
+        wb = openpyxl.load_workbook(folder_path + "/" + filename)
+        new_sheet_name = 'Testing'
+        if new_sheet_name not in wb.sheetnames:
+            wb.create_sheet(title=new_sheet_name)
+            print('created test')
+        wb.save(os.path.join(folder_path, filename))
+
+        # new_filename = f"testing_{filename}" #process file is here <-----
+        # file.save(os.path.join(folder_path, new_filename))
 
     return jsonify({'message': 'Files successfully uploaded', 'folder': timestamp})
 
