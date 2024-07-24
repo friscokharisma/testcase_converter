@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, send_from_directory, jsonify
 import os
 import zipfile
 from datetime import datetime
-import openpyxl
+from convert import convert_file
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -31,15 +31,24 @@ def upload_files():
 
     for file in files:
         filename = file.filename
-        file.save(os.path.join(folder_path, filename))
+        filelocation = os.path.join(folder_path, filename)
+        
+        # filename_test = f'testing_{filename}'
+        # filelocation_test = os.path.join(folder_path, filename_test)
+        file.save(filelocation)
+
+        convert_file(filename, filelocation)
+
+        # file.save(os.path.join(folder_path, filename))
+        
 
         # <----- processing file stage is here ----->
-        wb = openpyxl.load_workbook(folder_path + "/" + filename)
-        new_sheet_name = 'Testing'
-        if new_sheet_name not in wb.sheetnames:
-            wb.create_sheet(title=new_sheet_name)
-            print('created test')
-        wb.save(os.path.join(folder_path, filename))
+        # wb = openpyxl.load_workbook(folder_path + "/" + filename)
+        # new_sheet_name = 'Testing'
+        # if new_sheet_name not in wb.sheetnames:
+        #     wb.create_sheet(title=new_sheet_name)
+        #     print('created test')
+        # wb.save(os.path.join(folder_path, filename))
 
         # new_filename = f"testing_{filename}" #process file is here <-----
         # file.save(os.path.join(folder_path, new_filename))
