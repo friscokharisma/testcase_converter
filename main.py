@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Flask, render_template, request, send_from_directory, jsonify, abort
 import os
 import zipfile
 from datetime import datetime
 from convert import convert_file
+import logging
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -114,6 +115,28 @@ def list_folder(req_path):
 #             file_list.append({'name': file, 'type': 'file', 'path': path})
 
 #     return render_template('sample/gpt_folder_view.html', files=file_list, folder_path=folder_path)
+
+# testing
+# Configure logging
+
+app.config['TEMPLATE_FOLDER'] = os.path.join(os.getcwd(), 'testcase_template')
+
+logging.basicConfig(level=logging.DEBUG)
+
+@app.route('/use_template', methods=['GET', 'POST'])
+def use_template():
+    template_path = os.path.join(app.config['TEMPLATE_FOLDER'], 'Template Test Report Document FIX.xlsx')
+    logging.debug(f'Template path: {template_path}')
+    if not os.path.exists(template_path):
+        logging.error(f'Template file not found: {template_path}')
+        abort(404)
+
+    # Use the template file
+    # Add your logic to work with the .xlsx template file here
+
+    return jsonify({'message': 'Template found and used successfully'})
+
+# ------
 
 # for see list of files in uploads
 def get_directory_structure(rootdir):
