@@ -167,6 +167,8 @@ def debug():
 
 # ------
 
+app.config['TEMPLATE_FOLDER'] = os.path.join(os.getcwd(), 'testcase_template') 
+
 # for see list of files in uploads
 def get_directory_structure(rootdir):
     """
