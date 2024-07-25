@@ -119,22 +119,51 @@ def list_folder(req_path):
 # testing
 # Configure logging
 
-app.config['TEMPLATE_FOLDER'] = os.path.join(os.getcwd(), 'testcase_template')
+# app.config['TEMPLATE_FOLDER'] = os.path.join(os.getcwd(), 'testcase_template')
 
+# logging.basicConfig(level=logging.DEBUG)
+
+# @app.route('/use_template', methods=['GET', 'POST'])
+# def use_template():
+#     template_path = os.path.join(app.config['TEMPLATE_FOLDER'], 'Template Test Report Document FIX.xlsx')
+#     logging.debug(f'Template path: {template_path}')
+#     if not os.path.exists(template_path):
+#         logging.error(f'Template file not found: {template_path}')
+#         abort(404)
+
+#     # Use the template file
+#     # Add your logic to work with the .xlsx template file here
+
+#     return jsonify({'message': 'Template found and used successfully'})
+
+# Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
-@app.route('/use_template', methods=['GET', 'POST'])
-def use_template():
-    template_path = os.path.join(app.config['TEMPLATE_FOLDER'], 'Template Test Report Document FIX.xlsx')
-    logging.debug(f'Template path: {template_path}')
-    if not os.path.exists(template_path):
-        logging.error(f'Template file not found: {template_path}')
-        abort(404)
+@app.route('/debug')
+def debug():
+    # Get the current working directory
+    cwd = os.getcwd()
+    logging.debug(f'Current working directory: {cwd}')
 
-    # Use the template file
-    # Add your logic to work with the .xlsx template file here
+    # List files in the current working directory
+    files_in_cwd = os.listdir(cwd)
+    logging.debug(f'Files in current working directory: {files_in_cwd}')
 
-    return jsonify({'message': 'Template found and used successfully'})
+    # List files in the upload folder
+    upload_files = os.listdir(app.config['UPLOAD_FOLDER'])
+    logging.debug(f'Files in upload folder: {upload_files}')
+
+    # List files in the template folder
+    template_files = os.listdir(app.config['TEMPLATE_FOLDER'])
+    logging.debug(f'Files in template folder: {template_files}')
+
+    return jsonify({
+        'current_working_directory': cwd,
+        'files_in_cwd': files_in_cwd,
+        'upload_files': upload_files,
+        'template_files': template_files
+    })
+
 
 # ------
 
