@@ -41,7 +41,7 @@ def convert_file(raw_filename, file_location):
     # -------------------- HEADER --------------------
     # ---- template read -----
     # template_file = 'template_test_case/Template Test Report Document.xlsx'
-    template_file = 'app/Template Test Report Document FIX.xlsx'
+    template_file = 'Template Test Report Document FIX.xlsx'
     # converted_file2 = filename + '.xlsx'
 
     template_wb = xl.load_workbook(filename=template_file)
@@ -173,7 +173,7 @@ def convert_file(raw_filename, file_location):
     # img_import = img.thumbnail(maxsize, PIL.Image.ANTIALIAS)
     # converted_ws.add_image(img, 'A1')
 
-    resized_image_path = resize_image('app/privy_logo.png', 408, 168 ) #412, 172)#305, 127)
+    resized_image_path = resize_image('privy_logo.png', 408, 168 ) #412, 172)#305, 127)
     img = drawing.image.Image(resized_image_path)
     converted_ws.add_image(img, 'A1')
 
