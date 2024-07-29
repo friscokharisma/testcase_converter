@@ -52,7 +52,7 @@ def convert_file(raw_filename, file_location):
     # template_file = 'template_test_case/Template Test Report Document.xlsx'
     # template_file = find_files_by_name('.', 'Template Test Report Document FIX.xlsx') #test
     # template_file = 'Template Test Report Document FIX.xlsx' #local
-    template_file = '/app/Template Test Report Document FIX.xlsx' #local
+    template_file = '/app/Template Test Report Document Fix.xlsx' #local
     # converted_file2 = filename + '.xlsx'
 
     template_wb = xl.load_workbook(filename=template_file)
