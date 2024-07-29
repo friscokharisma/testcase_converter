@@ -140,6 +140,7 @@ def debug():
     logging.debug(f'Files in template folder: {template_files}')
 
     test_path = os.path.isfile('Template Test Report Document FIX.xlsx')
+    logging.debug(f'Path : {test_path}')
 
     return jsonify({
         'current_working_directory': cwd,
