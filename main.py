@@ -139,11 +139,14 @@ def debug():
     template_files = os.listdir(app.config['TEMPLATE_FOLDER'])
     logging.debug(f'Files in template folder: {template_files}')
 
+    test_path = os.path.isfile('Template Test Report Document FIX.xlsx')
+
     return jsonify({
         'current_working_directory': cwd,
         'files_in_cwd': files_in_cwd,
         'upload_files': upload_files,
-        'template_files': template_files
+        'template_files': template_files,
+        'path': test_path
     })
 
 
