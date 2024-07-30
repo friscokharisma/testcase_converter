@@ -38,7 +38,10 @@ def upload_files():
         # filelocation_test = os.path.join(folder_path, filename_test)
         file.save(filelocation)
 
-        convert_file(filename, filelocation)
+        try:
+            convert_file(filename, filelocation)
+        except ValueError as e:
+            return jsonify({'error': str(e)}), 422
 
         # file.save(os.path.join(folder_path, filename))
         
@@ -139,15 +142,11 @@ def debug():
     template_files = os.listdir(app.config['TEMPLATE_FOLDER'])
     logging.debug(f'Files in template folder: {template_files}')
 
-    test_path = os.path.isfile('Template Test Report Document FIX.xlsx')
-    logging.debug(f'Path : {test_path}')
-
     return jsonify({
         'current_working_directory': cwd,
         'files_in_cwd': files_in_cwd,
         'upload_files': upload_files,
         'template_files': template_files,
-        'path': test_path
     })
 
 

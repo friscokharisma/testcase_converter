@@ -137,6 +137,24 @@ def convert_file(raw_filename, file_location):
     # columns_in_sheet = pd.read_excel(file_path, sheet_name=sheet_name, header=None, nrows=1).iloc[0]
     # print(f"Columns in the sheet: {list(columns_in_sheet)}")
 
+    # testing handle error
+    # if header['A1'].value is not 'TEST OBJECTIVE':
+    #     raise ValueError("Missing value in xslx header")
+    # elif header['B1'].value is not 'PRECONDITION':
+    #     raise ValueError("Missing value in xslx header")
+    # elif header['C1'].value is not 'EXPECTED RESULT':
+    #     raise ValueError("Missing value in xslx header")
+    # elif header['D1'].value is not 'TYPE':
+    #     raise ValueError("Missing value in xslx header")
+    # elif header['E1'].value is not 'TEST RESULT':
+    #     raise ValueError("Missing value in xslx header")
+    # elif header['F1'].value is not 'TEST DATA':
+    #     raise ValueError("Missing value in xslx header")
+    # elif header['G1'].value is not 'FEATURE':
+    #     raise ValueError("Missing value in xslx header")
+    # else:
+    #     raise ValueError("Missing value in xslx header")
+
     column_name1 = 'TEST OBJECTIVE'
     column_name2 = 'PRECONDITION'
     column_name3 = 'EXPECTED RESULT'
@@ -148,13 +166,16 @@ def convert_file(raw_filename, file_location):
     # ----- INITIATION DATA -----
 
     # Test Case Form
-    test_objective = df.loc[start_row:end_row, column_name1].fillna("")
-    precondition = df.loc[start_row:end_row, column_name2].fillna("")
-    expected_result = df.loc[start_row:end_row, column_name3].fillna("")
-    test_type = df.loc[start_row:end_row, column_name4].fillna("")
-    test_result_raw = df.loc[start_row:end_row, column_name5].fillna("")
-    steps = df.loc[start_row:end_row, column_name6].fillna("")
-    feature = df.loc[start_row:end_row, column_name7].fillna("")
+    try:
+        test_objective = df.loc[start_row:end_row, column_name1].fillna("")
+        precondition = df.loc[start_row:end_row, column_name2].fillna("")
+        expected_result = df.loc[start_row:end_row, column_name3].fillna("")
+        test_type = df.loc[start_row:end_row, column_name4].fillna("")
+        test_result_raw = df.loc[start_row:end_row, column_name5].fillna("")
+        steps = df.loc[start_row:end_row, column_name6].fillna("")
+        feature = df.loc[start_row:end_row, column_name7].fillna("")
+    except:
+        raise ValueError("Missing value ind xslx header")
 
     new_data = list(zip(test_objective, precondition, expected_result, test_type, test_result_raw, steps, feature))
     # print(new_data)
